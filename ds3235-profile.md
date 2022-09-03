@@ -1,0 +1,3 @@
+- cycle : 20ms
+- frequency : 40Hz
+- 0.5ms ~ 2.5ms
