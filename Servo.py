@@ -1,26 +1,42 @@
 import pigpio
 from time import sleep
 
-class Servo() :
-    def __init__(self) :
+
+class Servo2():
+    def __init__(self):
         self.pi = pigpio.pi()
-        
-    def attach(self, pin,theta) :
-        self.pi.set_servo_pulsewidth(pin,0)
-        self.pi.set_servo_pulsewidth(pin,theta*7+560)
+
+    def attach(self, pin, theta):
+        self.pi.set_servo_pulsewidth(pin, theta*7+560)
         print('active attach')
-        
-    def write(self,pin,theta) :
-        if theta>270 :
+
+    def temp(self, pin):
+        print(type(self.pi.get_servo_pulsewidth(pin)))
+
+    def write(self, pin, theta):
+        theta = int(theta)
+        if theta > 270:
             theta = 270
             print('valueError: Theta must be less than 270')
-        if theta <0 :
+        if theta < 0:
             theta = 0
             print('ValueError: Theta must be more than 0')
-        self.pi.set_servo_pulsewidth(pin,theta*7+560)
+
+        current_theta = self.pi.get_servo_pulsewidth(pin)
+        theta = theta*7+560
+
+        if current_theta <= theta:
+            for i in range(current_theta, theta+1, 1):
+                self.pi.set_servo_pulsewidth(pin, i)
+                sleep(0.00085)
+        else:
+            for i in range(current_theta, theta, -1):
+                self.pi.set_servo_pulsewidth(pin, i)
+                sleep(0.00085)
+
         print('active write')
-        
-        
-#servo = Servo()
-#servo.attach(14,0)
-#servo.write(14,180)
+
+
+#servo = Servo2()
+# servo.attach(15,110)
+# servo.write(15,50)
